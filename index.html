@@ -52,17 +52,20 @@ body {
 
 .ob-slides {
   flex: 1;
-  display: flex;
-  overflow: hidden;
+  position: relative;
+  overflow-y: auto;
 }
 
 .ob-slide {
-  min-width: 100%;
+  display: none;
   padding: 60px 32px 32px;
-  display: flex;
   flex-direction: column;
   justify-content: center;
-  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  min-height: 100%;
+}
+
+.ob-slide.active {
+  display: flex;
 }
 
 .ob-eyebrow {
@@ -1019,7 +1022,7 @@ textarea { resize: none; line-height: 1.6; }
   <div class="ob-slides" id="obSlides">
 
     <!-- Slide 0: Welcome -->
-    <div class="ob-slide">
+    <div class="ob-slide active">
       <div class="ob-eyebrow">Content Agent · Tatyana Arbouzova</div>
       <div class="ob-title">Your personal<br><em>content</em><br>intelligence</div>
       <div class="ob-body">Built around your voice, your audience, and your upcoming events. Gets smarter every time you use it.</div>
@@ -1426,12 +1429,14 @@ function obPrev() {
 }
 
 function slideOb() {
-  const slides = document.getElementById('obSlides');
-  slides.style.transform = `translateX(-${obStep * 100}%)`;
-  slides.style.transition = 'transform 0.4s cubic-bezier(0.4,0,0.2,1)';
+  document.querySelectorAll('.ob-slide').forEach((s, i) => {
+    s.classList.toggle('active', i === obStep);
+  });
+  document.getElementById('obSlides').scrollTop = 0;
   updateObDots();
   updateObNav();
-  document.getElementById('obTestResult').className = 'ob-test-result';
+  const tr = document.getElementById('obTestResult');
+  if (tr) tr.className = 'ob-test-result';
 }
 
 function showObError(msg) {

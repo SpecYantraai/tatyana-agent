@@ -2,166 +2,467 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Content Agent — Tatyana</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #fafaf8;
+  --ink: #1c1917;
+  --paper: #faf9f7;
+  --cream: #f5f0e8;
+  --border: #e2ddd6;
+  --muted: #9c9289;
+  --navy: #1e3a5f;
+  --navy-light: #2d5282;
+  --red: #9b2335;
+  --gold: #b8860b;
+  --success: #2d6a4f;
   --surface: #ffffff;
-  --border: #e8e5e0;
-  --text: #1a1916;
-  --muted: #8a8780;
-  --accent: #1a5276;
-  --accent2: #c0392b;
-  --success: #1e8449;
-  --tag-bg: #eef2f7;
-  --tag-text: #1a5276;
+  --tag: #eef2f8;
+  --tag-text: #1e3a5f;
+  --shadow: 0 1px 3px rgba(28,25,23,0.08), 0 4px 12px rgba(28,25,23,0.04);
+  --shadow-lg: 0 8px 32px rgba(28,25,23,0.12);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+html { scroll-behavior: smooth; }
 
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'IBM Plex Sans', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
   min-height: 100vh;
-  max-width: 480px;
-  margin: 0 auto;
+  overflow-x: hidden;
 }
 
+/* ── ONBOARDING ─────────────────────────────────────────── */
+#onboarding {
+  position: fixed;
+  inset: 0;
+  background: var(--navy);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.ob-slides {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.ob-slide {
+  min-width: 100%;
+  padding: 60px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+
+.ob-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 20px;
+}
+
+.ob-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 10vw, 52px);
+  font-weight: 400;
+  color: white;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+.ob-title em {
+  font-style: italic;
+  color: #f0c060;
+}
+
+.ob-body {
+  font-size: 15px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.7;
+  margin-bottom: 32px;
+  max-width: 360px;
+}
+
+.ob-features {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 32px;
+}
+
+.ob-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.ob-feature-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.ob-feature-text strong {
+  display: block;
+  color: white;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.ob-feature-text span {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+}
+
+.ob-learn-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.ob-learn-item {
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ob-learn-num {
+  width: 28px;
+  height: 28px;
+  background: #f0c060;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  flex-shrink: 0;
+}
+
+.ob-learn-text {
+  font-size: 14px;
+  color: rgba(255,255,255,0.8);
+}
+
+/* API setup slide */
+.ob-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.ob-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 6px;
+}
+
+.ob-input {
+  width: 100%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  padding: 14px 16px;
+  color: white;
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+}
+
+.ob-input::placeholder { color: rgba(255,255,255,0.25); }
+.ob-input:focus { border-color: #f0c060; }
+
+.ob-provider-row {
+  display: flex;
+  gap: 8px;
+}
+
+.ob-provider-btn {
+  flex: 1;
+  padding: 12px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  color: rgba(255,255,255,0.6);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ob-provider-btn.active {
+  background: rgba(240,192,96,0.2);
+  border-color: #f0c060;
+  color: #f0c060;
+}
+
+.ob-test-result {
+  font-size: 13px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  display: none;
+}
+
+.ob-test-result.success { background: rgba(45,106,79,0.3); color: #a8d5b5; display: block; }
+.ob-test-result.error { background: rgba(155,35,53,0.3); color: #f4a0a8; display: block; }
+
+/* Progress dots */
+.ob-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px;
+}
+
+.ob-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.2);
+  transition: all 0.3s;
+}
+
+.ob-dot.active {
+  width: 20px;
+  background: #f0c060;
+}
+
+/* Nav buttons */
+.ob-nav {
+  padding: 0 32px 40px;
+  display: flex;
+  gap: 12px;
+}
+
+.ob-btn-primary {
+  flex: 1;
+  background: #f0c060;
+  color: var(--navy);
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+}
+
+.ob-btn-primary:active { transform: scale(0.97); }
+.ob-btn-primary:disabled { opacity: 0.5; }
+
+.ob-btn-secondary {
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.6);
+  border: none;
+  padding: 16px 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ── MAIN APP ────────────────────────────────────────────── */
+#app { display: none; min-height: 100vh; }
+
 header {
-  padding: 20px 20px 16px;
-  border-bottom: 1px solid var(--border);
   background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 20px 0;
   position: sticky;
   top: 0;
   z-index: 100;
+  box-shadow: 0 1px 0 var(--border);
 }
 
-.header-top {
+.header-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
-.brand {
-  font-family: 'Playfair Display', serif;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--accent);
+.wordmark {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--navy);
   letter-spacing: -0.02em;
 }
 
-.brand span { color: var(--accent2); }
+.wordmark span {
+  font-style: italic;
+  color: var(--red);
+}
 
-.settings-btn {
-  width: 36px; height: 36px;
+.header-right { display: flex; gap: 8px; align-items: center; }
+
+.learning-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--tag);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--tag-text);
+  font-family: 'DM Mono', monospace;
+  cursor: pointer;
+}
+
+.learning-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #2d9d5a;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+.settings-icon {
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   border: 1px solid var(--border);
   background: var(--surface);
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .tabs {
   display: flex;
-  gap: 4px;
+  gap: 0;
   overflow-x: auto;
   scrollbar-width: none;
-  padding-bottom: 2px;
 }
 .tabs::-webkit-scrollbar { display: none; }
 
 .tab {
   flex-shrink: 0;
-  padding: 7px 14px;
-  border-radius: 20px;
+  padding: 10px 16px;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  border: 1px solid var(--border);
+  border: none;
   background: transparent;
   color: var(--muted);
-  font-family: 'IBM Plex Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
+  border-bottom: 2px solid transparent;
   transition: all 0.15s;
   white-space: nowrap;
 }
 
 .tab.active {
-  background: var(--accent);
-  color: white;
-  border-color: var(--accent);
+  color: var(--navy);
+  border-bottom-color: var(--navy);
 }
 
-main { padding: 20px; }
+main { padding: 20px; max-width: 600px; margin: 0 auto; }
 
 .panel { display: none; }
-.panel.active { display: block; }
+.panel.active { display: block; animation: fadeIn 0.2s ease; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Input areas */
+.section-head { margin-bottom: 20px; }
 
 .section-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 6px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--ink);
   line-height: 1.2;
+  margin-bottom: 4px;
 }
 
 .section-sub {
   font-size: 13px;
   color: var(--muted);
-  margin-bottom: 20px;
   line-height: 1.5;
 }
 
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 12px;
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
 }
+
+.field { margin-bottom: 14px; }
+.field:last-child { margin-bottom: 0; }
 
 label {
   display: block;
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  color: var(--muted);
   margin-bottom: 6px;
-  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
 }
 
 input, textarea, select {
   width: 100%;
-  background: var(--bg);
+  background: var(--paper);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 12px 14px;
   font-size: 15px;
-  color: var(--text);
-  font-family: 'IBM Plex Sans', sans-serif;
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
   outline: none;
   transition: border-color 0.15s;
   -webkit-appearance: none;
 }
 
-input:focus, textarea:focus, select:focus {
-  border-color: var(--accent);
-}
+input:focus, textarea:focus { border-color: var(--navy); }
+textarea { resize: none; line-height: 1.6; }
 
-textarea { resize: none; min-height: 80px; line-height: 1.5; }
-
-.field { margin-bottom: 14px; }
-
-.btn-primary {
+.btn-generate {
   width: 100%;
-  background: var(--accent);
+  background: var(--navy);
   color: white;
   border: none;
   padding: 15px;
@@ -169,748 +470,1451 @@ textarea { resize: none; min-height: 80px; line-height: 1.5; }
   font-size: 15px;
   font-weight: 500;
   cursor: pointer;
-  font-family: 'IBM Plex Sans', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   transition: all 0.15s;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-top: 4px;
 }
 
-.btn-primary:active { transform: scale(0.98); }
-.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.btn-generate:active { transform: scale(0.98); background: var(--navy-light); }
+.btn-generate:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-.btn-secondary {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  font-family: 'IBM Plex Sans', sans-serif;
-  transition: all 0.15s;
-}
+/* Quick event buttons */
+.quick-events { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
 
-.btn-secondary:active { background: var(--bg); }
-
-.result-card {
+.quick-event {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
-  margin-bottom: 12px;
-  overflow: hidden;
-  animation: fadeUp 0.3s ease;
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: var(--shadow);
 }
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(8px); }
+.quick-event:active { background: var(--cream); }
+
+.quick-event-badge {
+  width: 36px;
+  height: 36px;
+  background: var(--navy);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.quick-event-name { font-size: 14px; font-weight: 500; color: var(--ink); }
+.quick-event-date { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospace; }
+
+/* ── POST CARDS ──────────────────────────────────────────── */
+.post-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  animation: cardIn 0.3s ease both;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.result-header {
+.post-card:nth-child(2) { animation-delay: 0.08s; }
+.post-card:nth-child(3) { animation-delay: 0.16s; }
+
+.card-header {
   padding: 12px 16px;
-  background: var(--tag-bg);
+  background: var(--cream);
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
 }
 
-.result-type {
+.card-format {
+  font-family: 'DM Mono', monospace;
   font-size: 11px;
   font-weight: 500;
-  color: var(--tag-text);
+  color: var(--navy);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  font-family: 'IBM Plex Mono', monospace;
 }
 
-.result-body {
+.card-badges { display: flex; gap: 6px; align-items: center; }
+
+.timing-badge {
+  font-size: 10px;
+  padding: 3px 8px;
+  background: #fef3cd;
+  color: #7d5a00;
+  border-radius: 4px;
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+}
+
+/* Inline editable post text */
+.post-body {
   padding: 16px;
+  border-bottom: 1px solid var(--border);
 }
 
-.result-text {
+.post-text {
   font-size: 14px;
-  line-height: 1.7;
-  color: var(--text);
+  line-height: 1.75;
+  color: var(--ink);
   white-space: pre-wrap;
   word-break: break-word;
+  outline: none;
+  min-height: 80px;
+  border-radius: 6px;
+  padding: 4px;
+  transition: background 0.15s;
+  cursor: text;
 }
 
+.post-text:focus {
+  background: var(--paper);
+  cursor: text;
+}
+
+.post-text.editing {
+  background: var(--paper);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.edit-hint {
+  font-size: 12px;
+  color: var(--muted);
+  font-style: italic;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+/* Rating row */
+.rating-row {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rating-label {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.stars { display: flex; gap: 4px; }
+
+.star {
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--border);
+  transition: all 0.1s;
+  line-height: 1;
+}
+
+.star.lit { color: #d4a017; }
+.star:hover { transform: scale(1.2); }
+
+.rating-saved {
+  font-size: 11px;
+  color: var(--success);
+  font-family: 'DM Mono', monospace;
+  margin-left: auto;
+  display: none;
+}
+
+.rating-saved.show { display: block; animation: fadeIn 0.2s ease; }
+
+/* Action row */
+.card-actions {
+  padding: 12px 16px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-copy {
+  background: var(--navy);
+  color: white;
+  border: none;
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-copy:active { background: var(--navy-light); transform: scale(0.97); }
+.btn-copy.copied { background: var(--success); }
+
+.btn-used {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 9px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+}
+
+.btn-used:active { background: var(--cream); }
+.btn-used.marked { border-color: var(--success); color: var(--success); }
+
+.btn-trash {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  padding: 9px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 8px;
+  transition: all 0.15s;
+}
+
+.btn-trash:active { background: #fff0f0; color: var(--red); }
+
+/* Hashtag display */
 .hashtag-row {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 .hashtag {
   font-size: 12px;
-  padding: 4px 10px;
-  background: var(--tag-bg);
+  padding: 3px 8px;
+  background: var(--tag);
   color: var(--tag-text);
   border-radius: 20px;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'DM Mono', monospace;
 }
 
-.copy-btn {
-  background: var(--accent);
-  color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  font-family: 'IBM Plex Sans', sans-serif;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.copy-btn:active { opacity: 0.8; }
-
-.timing-badge {
-  font-size: 11px;
-  padding: 3px 8px;
-  background: #fef9e7;
-  color: #9a7d0a;
-  border-radius: 4px;
-  font-family: 'IBM Plex Mono', monospace;
-  font-weight: 500;
-}
-
-.loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px 20px;
-  gap: 12px;
-}
-
-.spinner {
-  width: 28px; height: 28px;
-  border: 2px solid var(--border);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.loading-text {
-  font-size: 13px;
-  color: var(--muted);
-  font-family: 'IBM Plex Mono', monospace;
-  text-align: center;
-}
-
-.empty {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--muted);
-}
-
-.empty-icon { font-size: 32px; margin-bottom: 8px; opacity: 0.4; }
-.empty h3 { font-size: 15px; font-weight: 500; margin-bottom: 4px; color: var(--text); opacity: 0.6; }
-.empty p { font-size: 13px; line-height: 1.5; }
-
-.divider {
-  height: 1px;
-  background: var(--border);
-  margin: 16px 0;
-}
-
-.quick-events {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.quick-event-btn {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.15s;
-  text-align: left;
-  width: 100%;
-}
-
-.quick-event-btn:active { background: var(--tag-bg); }
-
-.event-name { font-size: 14px; font-weight: 500; color: var(--text); }
-.event-date { font-size: 12px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; }
-
-.tip {
-  background: #eafaf1;
+/* Tip block */
+.tip-block {
+  background: #f0f7f4;
   border-left: 3px solid var(--success);
   border-radius: 0 6px 6px 0;
   padding: 10px 12px;
   font-size: 12px;
-  color: #145a32;
+  color: #1a4a35;
   line-height: 1.5;
-  margin-top: 10px;
+  margin: 12px 16px 0;
 }
 
-/* Settings panel */
-.settings-panel {
+/* ── LOADING ─────────────────────────────────────────────── */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 20px;
+  gap: 14px;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--border);
+  border-top-color: var(--navy);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-msg {
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  text-align: center;
+}
+
+/* ── EMPTY STATE ─────────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--muted);
+}
+
+.empty-icon { font-size: 36px; opacity: 0.3; margin-bottom: 10px; }
+.empty-h { font-size: 16px; font-weight: 500; color: var(--ink); opacity: 0.5; margin-bottom: 6px; }
+.empty-p { font-size: 13px; line-height: 1.6; }
+
+/* ── INSIGHTS PANEL ──────────────────────────────────────── */
+.insights-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(28,25,23,0.5);
   z-index: 200;
   display: none;
   align-items: flex-end;
 }
 
-.settings-panel.open { display: flex; }
+.insights-overlay.open { display: flex; }
+
+.insights-sheet {
+  background: var(--surface);
+  border-radius: 20px 20px 0 0;
+  padding: 28px 24px 48px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: sheetIn 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes sheetIn {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.sheet-handle {
+  width: 36px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 0 auto 24px;
+}
+
+.sheet-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.sheet-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+.insight-card {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.insight-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.format-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.format-row:last-child { border-bottom: none; }
+
+.format-name { font-size: 14px; font-weight: 500; }
+.format-count { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospace; }
+
+.format-score {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.score-high { color: var(--success); }
+.score-mid { color: var(--gold); }
+.score-low { color: var(--red); }
+
+.accuracy-bar {
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.accuracy-fill {
+  height: 100%;
+  background: var(--navy);
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+.locked-insight {
+  text-align: center;
+  padding: 24px;
+  color: var(--muted);
+}
+
+.locked-insight .lock { font-size: 28px; margin-bottom: 10px; opacity: 0.4; }
+.locked-insight p { font-size: 13px; line-height: 1.6; }
+
+/* ── HISTORY TAB ─────────────────────────────────────────── */
+.history-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow);
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.history-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--navy);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.history-preview {
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.5;
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.history-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.history-tag {
+  font-size: 11px;
+  padding: 2px 7px;
+  background: var(--tag);
+  color: var(--tag-text);
+  border-radius: 4px;
+  font-family: 'DM Mono', monospace;
+}
+
+.history-date { font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; }
+
+.history-stars { font-size: 12px; margin-left: auto; }
+
+/* ── SETTINGS SHEET ──────────────────────────────────────── */
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(28,25,23,0.5);
+  z-index: 200;
+  display: none;
+  align-items: flex-end;
+}
+
+.settings-overlay.open { display: flex; }
 
 .settings-sheet {
   background: var(--surface);
   border-radius: 20px 20px 0 0;
-  padding: 24px 20px 40px;
+  padding: 28px 24px 48px;
   width: 100%;
-  max-height: 80vh;
-  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: sheetIn 0.3s cubic-bezier(0.4,0,0.2,1);
 }
 
-.settings-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
+.pill-row { display: flex; gap: 8px; margin-bottom: 4px; }
 
-.close-btn {
-  float: right;
-  background: var(--border);
-  border: none;
-  border-radius: 50%;
-  width: 28px; height: 28px;
-  cursor: pointer;
+.pill {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--paper);
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
-  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s;
 }
 
-/* Toast */
+.pill.active {
+  background: var(--navy);
+  color: white;
+  border-color: var(--navy);
+}
+
+/* ── TOAST ───────────────────────────────────────────────── */
 .toast {
   position: fixed;
-  bottom: 24px;
+  bottom: 28px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--text);
+  background: var(--ink);
   color: white;
   padding: 10px 20px;
   border-radius: 20px;
   font-size: 13px;
   font-weight: 500;
   z-index: 999;
-  animation: toastIn 0.2s ease;
   white-space: nowrap;
+  animation: toastIn 0.2s ease;
+  pointer-events: none;
 }
+
 @keyframes toastIn {
   from { opacity: 0; transform: translateX(-50%) translateY(8px); }
   to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
-.memory-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
+/* Divider */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 16px 0;
 }
-.memory-item:last-child { border-bottom: none; }
-.memory-title { font-size: 13px; font-weight: 500; }
-.memory-meta { font-size: 11px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; margin-top: 2px; }
-.memory-score { font-size: 14px; font-weight: 500; color: var(--accent); }
 
-.pill-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
-.pill {
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 13px;
-  border: 1px solid var(--border);
-  cursor: pointer;
-  background: var(--surface);
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   color: var(--muted);
-  transition: all 0.15s;
+  margin-bottom: 10px;
 }
-.pill.active { background: var(--accent); color: white; border-color: var(--accent); }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="header-top">
-    <div class="brand">content<span>.</span>agent</div>
-    <button class="settings-btn" onclick="openSettings()">⚙️</button>
-  </div>
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('link')">🔗 Link → Post</button>
-    <button class="tab" onclick="switchTab('event')">📅 Event</button>
-    <button class="tab" onclick="switchTab('podcast')">🎙️ Podcast</button>
-    <button class="tab" onclick="switchTab('memory')">🧠 Memory</button>
-  </div>
-</header>
+<!-- ── ONBOARDING ─────────────────────────────────────────── -->
+<div id="onboarding">
+  <div class="ob-slides" id="obSlides">
 
-<main>
-
-  <!-- LINK TO POST -->
-  <div class="panel active" id="panel-link">
-    <div class="section-title">Link → Post</div>
-    <div class="section-sub">Paste any link. Get 3 LinkedIn post options in your voice.</div>
-
-    <div class="card">
-      <div class="field">
-        <label>URL</label>
-        <input type="url" id="linkUrl" placeholder="https://..." inputmode="url">
+    <!-- Slide 0: Welcome -->
+    <div class="ob-slide">
+      <div class="ob-eyebrow">Content Agent · Tatyana Arbouzova</div>
+      <div class="ob-title">Your personal<br><em>content</em><br>intelligence</div>
+      <div class="ob-body">Built around your voice, your audience, and your upcoming events. Gets smarter every time you use it.</div>
+      <div class="ob-features">
+        <div class="ob-feature">
+          <div class="ob-feature-icon">🔗</div>
+          <div class="ob-feature-text">
+            <strong>Link → Post</strong>
+            <span>Paste any URL, get 3 posts in your voice</span>
+          </div>
+        </div>
+        <div class="ob-feature">
+          <div class="ob-feature-icon">📅</div>
+          <div class="ob-feature-text">
+            <strong>Event Machine</strong>
+            <span>Full content sequence for any conference</span>
+          </div>
+        </div>
+        <div class="ob-feature">
+          <div class="ob-feature-icon">🎙️</div>
+          <div class="ob-feature-text">
+            <strong>Podcast → Posts</strong>
+            <span>One episode becomes 5 LinkedIn posts</span>
+          </div>
+        </div>
       </div>
-      <div class="field">
-        <label>Your take (optional)</label>
-        <textarea id="linkContext" placeholder="What resonated with you? Any angle you want to explore?" rows="3"></textarea>
-      </div>
-      <button class="btn-primary" id="linkBtn" onclick="generatePosts()">
-        Generate 3 post options
-      </button>
     </div>
 
-    <div id="linkResults"></div>
+    <!-- Slide 1: How it learns -->
+    <div class="ob-slide">
+      <div class="ob-eyebrow">The intelligence layer</div>
+      <div class="ob-title">It learns<br>from <em>you</em></div>
+      <div class="ob-body">Every post you rate, edit, or delete teaches the agent. By week 3, it writes like you wrote it yourself.</div>
+      <div class="ob-learn-items">
+        <div class="ob-learn-item">
+          <div class="ob-learn-num">★</div>
+          <div class="ob-learn-text">Rate posts 1–5 stars. Agent learns your format preferences.</div>
+        </div>
+        <div class="ob-learn-item">
+          <div class="ob-learn-num">✎</div>
+          <div class="ob-learn-text">Edit posts before copying. Agent tracks what you change and adapts.</div>
+        </div>
+        <div class="ob-learn-item">
+          <div class="ob-learn-num">✕</div>
+          <div class="ob-learn-text">Delete posts you don't like. Agent stops generating that style.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: API Setup -->
+    <div class="ob-slide">
+      <div class="ob-eyebrow">One-time setup</div>
+      <div class="ob-title">Connect<br>your <em>LLM</em></div>
+      <div class="ob-body">Your API key is stored only on this device. Never shared, never logged.</div>
+      <div class="ob-form">
+        <div>
+          <div class="ob-label">Provider</div>
+          <div class="ob-provider-row">
+            <button class="ob-provider-btn active" onclick="selectObProvider('openai', this)">OpenAI</button>
+            <button class="ob-provider-btn" onclick="selectObProvider('anthropic', this)">Anthropic</button>
+          </div>
+        </div>
+        <div>
+          <div class="ob-label">API Key</div>
+          <input class="ob-input" type="password" id="obApiKey" placeholder="sk-...">
+        </div>
+        <div id="obTestResult" class="ob-test-result"></div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Ready -->
+    <div class="ob-slide">
+      <div class="ob-eyebrow">You're all set</div>
+      <div class="ob-title">Ready to<br><em>create</em></div>
+      <div class="ob-body">Your Innovate QA and QA or the Highway events are already loaded. Start with a link or jump straight to event content.</div>
+      <div class="ob-features">
+        <div class="ob-feature">
+          <div class="ob-feature-icon">💡</div>
+          <div class="ob-feature-text">
+            <strong>Tap text to edit</strong>
+            <span>Every generated post is fully editable inline</span>
+          </div>
+        </div>
+        <div class="ob-feature">
+          <div class="ob-feature-icon">🧠</div>
+          <div class="ob-feature-text">
+            <strong>Watch insights grow</strong>
+            <span>Tap the green dot after 3 rated posts</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- EVENT CONTENT -->
-  <div class="panel" id="panel-event">
-    <div class="section-title">Event Machine</div>
-    <div class="section-sub">Generate a full pre/during/post content sequence for any event.</div>
+  <div class="ob-dots" id="obDots">
+    <div class="ob-dot active"></div>
+    <div class="ob-dot"></div>
+    <div class="ob-dot"></div>
+    <div class="ob-dot"></div>
+  </div>
 
-    <div style="margin-bottom:14px">
-      <label style="margin-bottom:8px">Your upcoming events</label>
+  <div class="ob-nav" id="obNav">
+    <button class="ob-btn-secondary" id="obBack" onclick="obPrev()" style="display:none">Back</button>
+    <button class="ob-btn-primary" id="obNext" onclick="obNext()">Get started →</button>
+  </div>
+</div>
+
+<!-- ── MAIN APP ────────────────────────────────────────────── -->
+<div id="app">
+  <header>
+    <div class="header-row">
+      <div class="wordmark">content<span>.</span>agent</div>
+      <div class="header-right">
+        <div class="learning-pill" onclick="openInsights()">
+          <div class="learning-dot"></div>
+          <span id="learningLabel">Learning</span>
+        </div>
+        <div class="settings-icon" onclick="openSettings()">⚙️</div>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('link', this)">🔗 Link</button>
+      <button class="tab" onclick="switchTab('event', this)">📅 Event</button>
+      <button class="tab" onclick="switchTab('podcast', this)">🎙️ Podcast</button>
+      <button class="tab" onclick="switchTab('history', this)">📊 History</button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- LINK TAB -->
+    <div class="panel active" id="panel-link">
+      <div class="section-head">
+        <div class="section-title">Link → Post</div>
+        <div class="section-sub">Paste any URL. Get 3 LinkedIn posts in your voice — ready to edit and publish.</div>
+      </div>
+      <div class="card">
+        <div class="field">
+          <label>Article or page URL</label>
+          <input type="url" id="linkUrl" placeholder="https://..." inputmode="url" autocomplete="off">
+        </div>
+        <div class="field">
+          <label>Your angle (optional)</label>
+          <textarea id="linkContext" rows="2" placeholder="What resonated with you? Any specific angle to explore?"></textarea>
+        </div>
+        <button class="btn-generate" id="linkBtn" onclick="generateLinkPosts()">
+          Generate 3 post options
+        </button>
+      </div>
+      <div id="linkResults"></div>
+    </div>
+
+    <!-- EVENT TAB -->
+    <div class="panel" id="panel-event">
+      <div class="section-head">
+        <div class="section-title">Event Machine</div>
+        <div class="section-sub">Generate a complete pre/during/post content sequence for any conference.</div>
+      </div>
+
+      <div class="section-label">Your upcoming events</div>
       <div class="quick-events">
-        <button class="quick-event-btn" onclick="fillEvent('Innovate QA 2026','June 4-5, 2026','Seattle, WA','innovateqaevents.com','Annual conference shaping software quality with AI. Tatyana organises this event.')">
+        <button class="quick-event" onclick="fillEvent('Innovate QA 2026','June 4-5, 2026','Seattle, WA','innovateqaevents.com','Tatyana organises this event. Annual conference shaping software quality with AI. Practitioner-first, no hype.')">
+          <div class="quick-event-badge">🏔️</div>
           <div>
-            <div class="event-name">Innovate QA 2026</div>
-            <div class="event-date">June 4-5 · Seattle, WA</div>
+            <div class="quick-event-name">Innovate QA 2026</div>
+            <div class="quick-event-date">June 4–5 · Seattle, WA · Organiser</div>
           </div>
         </button>
-        <button class="quick-event-btn" onclick="fillEvent('QA or the Highway','June 12, 2026','Columbus, Ohio','qaorthehwy.com','Midwest largest software quality conference. Tatyana is keynote speaker.')">
+        <button class="quick-event" onclick="fillEvent('QA or the Highway','June 12, 2026','Columbus, Ohio','qaorthehwy.com','Midwest largest software quality conference. Tatyana is keynote speaker. Scaling Trust Not Automation theme.')">
+          <div class="quick-event-badge">🎤</div>
           <div>
-            <div class="event-name">QA or the Highway</div>
-            <div class="event-date">June 12 · Columbus, OH · Keynote</div>
+            <div class="quick-event-name">QA or the Highway</div>
+            <div class="quick-event-date">June 12 · Columbus, OH · Keynote</div>
           </div>
         </button>
       </div>
+
+      <div class="card">
+        <div class="field">
+          <label>Event name</label>
+          <input type="text" id="eventName" placeholder="Conference or meetup name">
+        </div>
+        <div class="field">
+          <label>Date</label>
+          <input type="text" id="eventDate" placeholder="e.g. June 4-5, 2026">
+        </div>
+        <div class="field">
+          <label>Location</label>
+          <input type="text" id="eventLocation" placeholder="City, State">
+        </div>
+        <div class="field">
+          <label>URL</label>
+          <input type="url" id="eventUrl" placeholder="Event website">
+        </div>
+        <div class="field">
+          <label>Key details</label>
+          <textarea id="eventDetails" rows="3" placeholder="Speakers, theme, what makes this event different..."></textarea>
+        </div>
+        <button class="btn-generate" id="eventBtn" onclick="generateEventContent()">
+          Generate 5-post sequence
+        </button>
+      </div>
+      <div id="eventResults"></div>
     </div>
 
-    <div class="card">
-      <div class="field">
-        <label>Event name</label>
-        <input type="text" id="eventName" placeholder="Conference or meetup name">
+    <!-- PODCAST TAB -->
+    <div class="panel" id="panel-podcast">
+      <div class="section-head">
+        <div class="section-title">Podcast → Posts</div>
+        <div class="section-sub">The Agentic Quality Podcast deserves more reach. One episode becomes 5 LinkedIn posts.</div>
       </div>
-      <div class="field">
-        <label>Date</label>
-        <input type="text" id="eventDate" placeholder="e.g. June 4-5, 2026">
+      <div class="card">
+        <div class="field">
+          <label>Episode title</label>
+          <input type="text" id="podTitle" placeholder="Episode title">
+        </div>
+        <div class="field">
+          <label>Guest name</label>
+          <input type="text" id="podGuest" placeholder="Guest's full name">
+        </div>
+        <div class="field">
+          <label>Guest title & company</label>
+          <input type="text" id="podGuestTitle" placeholder="e.g. VP of Engineering at Acme">
+        </div>
+        <div class="field">
+          <label>Episode URL</label>
+          <input type="url" id="podUrl" placeholder="contextqa.com/podcast/...">
+        </div>
+        <div class="field">
+          <label>Key insights or transcript</label>
+          <textarea id="podContent" rows="5" placeholder="Paste key quotes, insights, or a summary of what was discussed..."></textarea>
+        </div>
+        <button class="btn-generate" id="podBtn" onclick="generatePodcastPosts()">
+          Generate 5 posts from episode
+        </button>
       </div>
-      <div class="field">
-        <label>Location</label>
-        <input type="text" id="eventLocation" placeholder="City, State">
-      </div>
-      <div class="field">
-        <label>URL</label>
-        <input type="url" id="eventUrl" placeholder="Event website">
-      </div>
-      <div class="field">
-        <label>Key details (speakers, theme, what's different)</label>
-        <textarea id="eventDetails" placeholder="What makes this event worth attending? Any notable speakers or moments?" rows="3"></textarea>
-      </div>
-      <button class="btn-primary" id="eventBtn" onclick="generateEventContent()">
-        Generate content sequence
-      </button>
+      <div id="podResults"></div>
     </div>
 
-    <div id="eventResults"></div>
+    <!-- HISTORY TAB -->
+    <div class="panel" id="panel-history">
+      <div class="section-head">
+        <div class="section-title">History</div>
+        <div class="section-sub">Posts you've rated and used. The agent learns from every entry here.</div>
+      </div>
+      <div id="historyContent">
+        <div class="empty-state">
+          <div class="empty-icon">📊</div>
+          <div class="empty-h">No history yet</div>
+          <div class="empty-p">Generate posts, rate them, and use them.<br>They'll appear here.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Insights Sheet -->
+<div class="insights-overlay" id="insightsOverlay" onclick="closeInsightsOutside(event)">
+  <div class="insights-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Learning Insights</div>
+    <div class="sheet-sub">How the agent is adapting to your style</div>
+    <div id="insightsContent">
+      <div class="locked-insight">
+        <div class="lock">🔒</div>
+        <p>Rate 3 or more posts to unlock insights about your content preferences.</p>
+      </div>
+    </div>
   </div>
-
-  <!-- PODCAST REPURPOSER -->
-  <div class="panel" id="panel-podcast">
-    <div class="section-title">Podcast → Posts</div>
-    <div class="section-sub">One episode becomes 5 LinkedIn posts. The Agentic Quality podcast deserves more reach.</div>
-
-    <div class="card">
-      <div class="field">
-        <label>Episode title</label>
-        <input type="text" id="podTitle" placeholder="e.g. Rethinking quality metrics at scale">
-      </div>
-      <div class="field">
-        <label>Guest name</label>
-        <input type="text" id="podGuest" placeholder="Guest's full name">
-      </div>
-      <div class="field">
-        <label>Guest title & company</label>
-        <input type="text" id="podGuestTitle" placeholder="e.g. Director of Quality, Slalom">
-      </div>
-      <div class="field">
-        <label>Episode URL</label>
-        <input type="url" id="podUrl" placeholder="contextqa.com/podcast/...">
-      </div>
-      <div class="field">
-        <label>Key insights or transcript excerpt</label>
-        <textarea id="podContent" placeholder="Paste key quotes, insights, or a summary of what was discussed..." rows="5"></textarea>
-      </div>
-      <button class="btn-primary" id="podBtn" onclick="generatePodcastPosts()">
-        Generate 5 posts from episode
-      </button>
-    </div>
-
-    <div id="podResults"></div>
-  </div>
-
-  <!-- MEMORY -->
-  <div class="panel" id="panel-memory">
-    <div class="section-title">Memory</div>
-    <div class="section-sub">Posts you've used. Helps the agent learn what performs.</div>
-    <div class="card" id="memoryContent">
-      <div class="empty">
-        <div class="empty-icon">🧠</div>
-        <h3>No memory yet</h3>
-        <p>Use a post and mark it as used to build memory</p>
-      </div>
-    </div>
-  </div>
-
-</main>
+</div>
 
 <!-- Settings Sheet -->
-<div class="settings-panel" id="settingsPanel" onclick="closeSettingsOutside(event)">
+<div class="settings-overlay" id="settingsOverlay" onclick="closeSettingsOutside(event)">
   <div class="settings-sheet">
-    <button class="close-btn" onclick="closeSettings()">✕</button>
-    <div class="settings-title">Settings</div>
-
-    <div class="field">
-      <label>LLM Provider</label>
-      <div class="pill-row" id="providerPills">
-        <button class="pill active" onclick="selectProvider('openai', this)">OpenAI</button>
-        <button class="pill" onclick="selectProvider('anthropic', this)">Anthropic</button>
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Settings</div>
+    <div class="field" style="margin-top:20px">
+      <label>Provider</label>
+      <div class="pill-row">
+        <button class="pill active" id="pillOpenAI" onclick="selectSettingsProvider('openai', this)">OpenAI</button>
+        <button class="pill" id="pillAnthropic" onclick="selectSettingsProvider('anthropic', this)">Anthropic</button>
       </div>
     </div>
-
     <div class="field">
       <label>API Key</label>
-      <input type="password" id="settingsApiKey" placeholder="sk-...">
+      <input type="password" id="settingsKey" placeholder="sk-...">
     </div>
-
-    <button class="btn-primary" onclick="saveSettings()">Save settings</button>
+    <button class="btn-generate" onclick="saveSettings()" style="margin-top:8px">Save settings</button>
+    <div style="margin-top:16px;text-align:center">
+      <button onclick="resetOnboarding()" style="background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;text-decoration:underline">Reset onboarding</button>
+    </div>
   </div>
 </div>
 
 <script>
-// ── State ─────────────────────────────────────────────
-let settings = { provider: 'openai', api_key: '' };
-let memory = [];
+// ── State ─────────────────────────────────────────────────
+let S = { provider: 'openai', api_key: '' };
+let obStep = 0;
+const OB_STEPS = 4;
 
+// ── Init ──────────────────────────────────────────────────
 async function init() {
+  const seen = localStorage.getItem('ca_onboarded');
+  if (seen) {
+    await loadSettings();
+    showApp();
+  } else {
+    document.getElementById('onboarding').style.display = 'flex';
+  }
+}
+
+async function loadSettings() {
   try {
-    const res = await fetch('/data/settings');
-    const data = await res.json();
-    if (data.provider) {
-      settings = data;
-      document.getElementById('settingsApiKey').value = data.api_key || '';
-      selectProvider(data.provider);
+    const r = await fetch('/data/settings');
+    const d = await r.json();
+    if (d.api_key) {
+      S = d;
+      document.getElementById('settingsKey').value = d.api_key;
+      selectSettingsProvider(d.provider);
     }
   } catch(e) {}
+}
 
-  try {
-    const res = await fetch('/data/memory');
-    const data = await res.json();
-    if (data.entries) { memory = data.entries; renderMemory(); }
-  } catch(e) {}
+function showApp() {
+  document.getElementById('onboarding').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  loadHistory();
+  loadInsights();
 }
 
 init();
 
-// ── Tabs ──────────────────────────────────────────────
-function switchTab(tab) {
+// ── Onboarding ────────────────────────────────────────────
+let obProvider = 'openai';
+
+function selectObProvider(p, btn) {
+  obProvider = p;
+  document.querySelectorAll('.ob-provider-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function updateObDots() {
+  document.querySelectorAll('.ob-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === obStep);
+  });
+}
+
+function updateObNav() {
+  const back = document.getElementById('obBack');
+  const next = document.getElementById('obNext');
+  back.style.display = obStep > 0 ? 'block' : 'none';
+
+  if (obStep === OB_STEPS - 1) {
+    next.textContent = 'Open my agent →';
+  } else if (obStep === 2) {
+    next.textContent = 'Test & continue →';
+  } else {
+    next.textContent = obStep === 0 ? 'Get started →' : 'Continue →';
+  }
+}
+
+async function obNext() {
+  if (obStep === 2) {
+    // Test API key
+    const key = document.getElementById('obApiKey').value.trim();
+    if (!key) { showObError('Paste your API key to continue'); return; }
+    S.provider = obProvider;
+    S.api_key = key;
+
+    const btn = document.getElementById('obNext');
+    btn.disabled = true;
+    btn.textContent = 'Testing...';
+
+    const ok = await testApiKey(S.provider, S.api_key);
+    btn.disabled = false;
+
+    if (!ok) {
+      showObError('Could not connect. Check your API key and try again.');
+      updateObNav();
+      return;
+    }
+
+    showObSuccess('Connected successfully ✓');
+    await fetch('/data/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(S)
+    });
+  }
+
+  if (obStep < OB_STEPS - 1) {
+    obStep++;
+    slideOb();
+  } else {
+    localStorage.setItem('ca_onboarded', '1');
+    showApp();
+  }
+}
+
+function obPrev() {
+  if (obStep > 0) { obStep--; slideOb(); }
+}
+
+function slideOb() {
+  const slides = document.getElementById('obSlides');
+  slides.style.transform = `translateX(-${obStep * 100}%)`;
+  slides.style.transition = 'transform 0.4s cubic-bezier(0.4,0,0.2,1)';
+  updateObDots();
+  updateObNav();
+  document.getElementById('obTestResult').className = 'ob-test-result';
+}
+
+function showObError(msg) {
+  const el = document.getElementById('obTestResult');
+  el.className = 'ob-test-result error';
+  el.textContent = msg;
+}
+
+function showObSuccess(msg) {
+  const el = document.getElementById('obTestResult');
+  el.className = 'ob-test-result success';
+  el.textContent = msg;
+}
+
+async function testApiKey(provider, key) {
+  try {
+    if (provider === 'openai') {
+      const r = await fetch('/api/test-key', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider, api_key: key })
+      });
+      return r.ok;
+    } else {
+      const r = await fetch('/api/test-key', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider, api_key: key })
+      });
+      return r.ok;
+    }
+  } catch(e) { return false; }
+}
+
+function resetOnboarding() {
+  localStorage.removeItem('ca_onboarded');
+  location.reload();
+}
+
+// ── Tabs ──────────────────────────────────────────────────
+function switchTab(tab, btn) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  event.target.classList.add('active');
+  btn.classList.add('active');
   document.getElementById('panel-' + tab).classList.add('active');
-  if (tab === 'memory') renderMemory();
+  if (tab === 'history') loadHistory();
 }
 
-// ── Settings ──────────────────────────────────────────
-function openSettings() {
-  document.getElementById('settingsPanel').classList.add('open');
-}
+// ── Settings ──────────────────────────────────────────────
+function openSettings() { document.getElementById('settingsOverlay').classList.add('open'); }
+function closeSettings() { document.getElementById('settingsOverlay').classList.remove('open'); }
+function closeSettingsOutside(e) { if (e.target.id === 'settingsOverlay') closeSettings(); }
 
-function closeSettings() {
-  document.getElementById('settingsPanel').classList.remove('open');
-}
-
-function closeSettingsOutside(e) {
-  if (e.target === document.getElementById('settingsPanel')) closeSettings();
-}
-
-function selectProvider(p, btn) {
-  settings.provider = p;
-  document.querySelectorAll('#providerPills .pill').forEach(b => b.classList.remove('active'));
+function selectSettingsProvider(p, btn) {
+  S.provider = p;
+  document.querySelectorAll('#settingsOverlay .pill').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
   else {
-    document.querySelectorAll('#providerPills .pill').forEach(b => {
-      if (b.textContent.toLowerCase().includes(p)) b.classList.add('active');
-    });
+    const target = p === 'openai' ? document.getElementById('pillOpenAI') : document.getElementById('pillAnthropic');
+    if (target) target.classList.add('active');
   }
 }
 
 async function saveSettings() {
-  settings.api_key = document.getElementById('settingsApiKey').value.trim();
+  S.api_key = document.getElementById('settingsKey').value.trim();
   await fetch('/data/settings', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(settings)
+    body: JSON.stringify(S)
   });
   closeSettings();
   toast('Settings saved');
 }
 
 function getPayload(extra) {
-  return { ...settings, ...extra };
+  return { provider: S.provider, api_key: S.api_key, ...extra };
 }
 
-// ── Feature 1: Link → Post ────────────────────────────
-async function generatePosts() {
-  if (!settings.api_key) { openSettings(); toast('Add your API key first'); return; }
+// ── Feature 1: Link → Post ────────────────────────────────
+async function generateLinkPosts() {
+  if (!S.api_key) { openSettings(); toast('Add your API key first'); return; }
   const url = document.getElementById('linkUrl').value.trim();
   if (!url) { toast('Paste a URL first'); return; }
 
-  const btn = document.getElementById('linkBtn');
-  btn.disabled = true; btn.textContent = 'Generating...';
-
-  document.getElementById('linkResults').innerHTML = `
-    <div class="loading">
-      <div class="spinner"></div>
-      <div class="loading-text">Reading the link and writing in your voice...</div>
-    </div>`;
+  setLoading('linkBtn', 'linkResults', 'Reading the link and writing in your voice...');
 
   try {
-    const res = await fetch('/api/link-to-post', {
+    const r = await fetch('/api/link-to-post', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(getPayload({
-        url,
-        context: document.getElementById('linkContext').value.trim()
-      }))
+      body: JSON.stringify(getPayload({ url, context: document.getElementById('linkContext').value.trim() }))
     });
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
-    renderPostResults('linkResults', data.posts);
+    const d = await r.json();
+    if (d.error) throw new Error(d.error);
+    renderPosts('linkResults', d.posts);
   } catch(e) {
-    document.getElementById('linkResults').innerHTML = `<div class="empty"><h3>Failed</h3><p>${e.message}</p></div>`;
+    showError('linkResults', e.message);
   }
 
-  btn.disabled = false; btn.textContent = 'Generate 3 post options';
+  resetBtn('linkBtn', 'Generate 3 post options');
 }
 
-function renderPostResults(containerId, posts) {
-  const html = posts.map((p, i) => `
-    <div class="result-card">
-      <div class="result-header">
-        <span class="result-type">Option ${i+1} — ${p.format || p.type || 'Post'}</span>
-        <button class="copy-btn" onclick="copyPost(${i}, '${containerId}')">Copy</button>
-      </div>
-      <div class="result-body">
-        <div class="result-text" id="post-${containerId}-${i}">${escHtml(p.body || p.hook + '\n\n' + p.body)}</div>
-        <div class="hashtag-row">${(p.hashtags || []).map(h => `<span class="hashtag">${h}</span>`).join('')}</div>
-        <div style="display:flex;gap:8px;margin-top:12px">
-          <button class="btn-secondary" onclick="markUsed('${p.format || p.type}', '${escHtml(p.body || '').substring(0,60)}')">✓ Used this</button>
-        </div>
-      </div>
-    </div>`).join('');
-  document.getElementById(containerId).innerHTML = html;
-  window._posts = window._posts || {};
-  window._posts[containerId] = posts;
-}
-
-function copyPost(i, containerId) {
-  const post = window._posts?.[containerId]?.[i];
-  if (!post) return;
-  const text = (post.body || '') + '\n\n' + (post.hashtags || []).join(' ');
-  navigator.clipboard.writeText(text).then(() => toast('Copied to clipboard'));
-}
-
-// ── Feature 2: Event Content ──────────────────────────
-function fillEvent(name, date, location, url, details) {
+// ── Feature 2: Event ──────────────────────────────────────
+function fillEvent(name, date, loc, url, details) {
   document.getElementById('eventName').value = name;
   document.getElementById('eventDate').value = date;
-  document.getElementById('eventLocation').value = location;
+  document.getElementById('eventLocation').value = loc;
   document.getElementById('eventUrl').value = url;
   document.getElementById('eventDetails').value = details;
   toast(`${name} loaded`);
 }
 
 async function generateEventContent() {
-  if (!settings.api_key) { openSettings(); toast('Add your API key first'); return; }
-  const name = document.getElementById('eventName').value.trim();
-  if (!name) { toast('Enter event name'); return; }
+  if (!S.api_key) { openSettings(); toast('Add your API key first'); return; }
+  if (!document.getElementById('eventName').value.trim()) { toast('Enter event name'); return; }
 
-  const btn = document.getElementById('eventBtn');
-  btn.disabled = true; btn.textContent = 'Generating sequence...';
-
-  document.getElementById('eventResults').innerHTML = `
-    <div class="loading">
-      <div class="spinner"></div>
-      <div class="loading-text">Creating your 5-post event sequence...</div>
-    </div>`;
+  setLoading('eventBtn', 'eventResults', 'Creating your 5-post event sequence...');
 
   try {
-    const res = await fetch('/api/event-content', {
+    const r = await fetch('/api/event-content', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(getPayload({
-        event_name: name,
+        event_name: document.getElementById('eventName').value,
         event_date: document.getElementById('eventDate').value,
         event_location: document.getElementById('eventLocation').value,
         event_url: document.getElementById('eventUrl').value,
         details: document.getElementById('eventDetails').value
       }))
     });
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
-    renderEventResults(data.sequence);
+    const d = await r.json();
+    if (d.error) throw new Error(d.error);
+    renderPosts('eventResults', d.sequence);
   } catch(e) {
-    document.getElementById('eventResults').innerHTML = `<div class="empty"><h3>Failed</h3><p>${e.message}</p></div>`;
+    showError('eventResults', e.message);
   }
 
-  btn.disabled = false; btn.textContent = 'Generate content sequence';
+  resetBtn('eventBtn', 'Generate 5-post sequence');
 }
 
-function renderEventResults(sequence) {
-  const html = sequence.map((p, i) => `
-    <div class="result-card">
-      <div class="result-header">
-        <span class="result-type">${p.title || `Post ${i+1}`}</span>
-        <span class="timing-badge">${p.timing || ''}</span>
-      </div>
-      <div class="result-body">
-        <div class="result-text" id="ev-post-${i}">${escHtml(p.body)}</div>
-        <div class="hashtag-row">${(p.hashtags || []).map(h => `<span class="hashtag">${h}</span>`).join('')}</div>
-        ${p.tip ? `<div class="tip">💡 ${escHtml(p.tip)}</div>` : ''}
-        <div style="margin-top:10px">
-          <button class="copy-btn" onclick="copyById('ev-post-${i}')">Copy post</button>
-        </div>
-      </div>
-    </div>`).join('');
-  document.getElementById('eventResults').innerHTML = html;
-}
-
-// ── Feature 3: Podcast ────────────────────────────────
+// ── Feature 3: Podcast ────────────────────────────────────
 async function generatePodcastPosts() {
-  if (!settings.api_key) { openSettings(); toast('Add your API key first'); return; }
-  const title = document.getElementById('podTitle').value.trim();
-  if (!title) { toast('Enter episode title'); return; }
+  if (!S.api_key) { openSettings(); toast('Add your API key first'); return; }
+  if (!document.getElementById('podTitle').value.trim()) { toast('Enter episode title'); return; }
 
-  const btn = document.getElementById('podBtn');
-  btn.disabled = true; btn.textContent = 'Generating posts...';
-
-  document.getElementById('podResults').innerHTML = `
-    <div class="loading">
-      <div class="spinner"></div>
-      <div class="loading-text">Turning one episode into 5 posts...</div>
-    </div>`;
+  setLoading('podBtn', 'podResults', 'Turning one episode into 5 posts...');
 
   try {
-    const res = await fetch('/api/podcast-repurpose', {
+    const r = await fetch('/api/podcast-repurpose', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(getPayload({
-        title,
+        title: document.getElementById('podTitle').value,
         guest: document.getElementById('podGuest').value,
         guest_title: document.getElementById('podGuestTitle').value,
         url: document.getElementById('podUrl').value,
         content: document.getElementById('podContent').value
       }))
     });
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
-    renderPodcastResults(data.posts);
+    const d = await r.json();
+    if (d.error) throw new Error(d.error);
+    renderPosts('podResults', d.posts);
   } catch(e) {
-    document.getElementById('podResults').innerHTML = `<div class="empty"><h3>Failed</h3><p>${e.message}</p></div>`;
+    showError('podResults', e.message);
   }
 
-  btn.disabled = false; btn.textContent = 'Generate 5 posts from episode';
+  resetBtn('podBtn', 'Generate 5 posts from episode');
 }
 
-function renderPodcastResults(posts) {
-  const html = posts.map((p, i) => `
-    <div class="result-card">
-      <div class="result-header">
-        <span class="result-type">${p.type || `Post ${i+1}`}</span>
-        <button class="copy-btn" onclick="copyById('pod-post-${i}')">Copy</button>
+// ── Render post cards ─────────────────────────────────────
+function renderPosts(containerId, posts) {
+  window._posts = window._posts || {};
+  window._posts[containerId] = posts;
+
+  const html = posts.map((p, i) => {
+    const id = p.id || `${containerId}_${i}`;
+    const format = p.format || p.type || p.title || 'Post';
+    const body = p.body || '';
+    const hashtags = p.hashtags || [];
+    const hint = p.edit_hint || p.tip || '';
+    const timing = p.timing || p.best_time || '';
+    const feature = p.feature || '';
+
+    return `
+    <div class="post-card" id="card-${id}">
+      <div class="card-header">
+        <span class="card-format">${escHtml(format)}</span>
+        <div class="card-badges">
+          ${timing ? `<span class="timing-badge">${escHtml(timing)}</span>` : ''}
+        </div>
       </div>
-      <div class="result-body">
-        <div class="result-text" id="pod-post-${i}">${escHtml(p.body)}</div>
-        <div class="hashtag-row">${(p.hashtags || []).map(h => `<span class="hashtag">${h}</span>`).join('')}</div>
-        ${p.best_time_to_post ? `<div class="tip">⏰ Best time: ${escHtml(p.best_time_to_post)}</div>` : ''}
+
+      <div class="post-body">
+        <div class="post-text"
+          id="text-${id}"
+          contenteditable="true"
+          spellcheck="true"
+          data-original="${escAttr(body)}"
+          data-id="${id}"
+          data-format="${escAttr(format)}"
+          data-feature="${escAttr(feature)}"
+          data-source="${escAttr(p.source_url || '')}"
+          onblur="onPostEdit(this)"
+          onfocus="this.classList.add('editing')"
+        >${escHtml(body)}</div>
+
+        ${hashtags.length ? `<div class="hashtag-row">${hashtags.map(h => `<span class="hashtag">${escHtml(h)}</span>`).join('')}</div>` : ''}
+        ${hint ? `<div class="edit-hint">💡 ${escHtml(hint)}</div>` : ''}
       </div>
-    </div>`).join('');
-  document.getElementById('podResults').innerHTML = html;
+
+      <div class="rating-row">
+        <span class="rating-label">Rate:</span>
+        <div class="stars" id="stars-${id}">
+          ${[1,2,3,4,5].map(n => `<span class="star" onclick="rateStar('${id}', ${n}, this)" data-val="${n}">★</span>`).join('')}
+        </div>
+        <span class="rating-saved" id="rated-${id}">Saved ✓</span>
+      </div>
+
+      <div class="card-actions">
+        <button class="btn-copy" id="copy-${id}" onclick="copyPost('${id}')">Copy post</button>
+        <button class="btn-used" id="used-${id}" onclick="markUsed('${id}', '${escAttr(format)}', '${escAttr(feature)}')">✓ Used</button>
+        <button class="btn-trash" onclick="deletePost('${id}', '${escAttr(format)}', '${escAttr(feature)}', '${escAttr(body.substring(0,60))}')">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById(containerId).innerHTML = html;
 }
 
-// ── Memory ────────────────────────────────────────────
-async function markUsed(type, preview) {
-  const entry = {
-    id: Date.now(),
-    type,
-    preview,
-    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-  };
-  memory.unshift(entry);
-  if (memory.length > 30) memory = memory.slice(0, 30);
-  await fetch('/data/memory', {
+// ── Post interactions ─────────────────────────────────────
+function onPostEdit(el) {
+  el.classList.remove('editing');
+  // Edit distance is captured on rate/copy/used
+}
+
+async function rateStar(id, score, starEl) {
+  const stars = starEl.parentElement.querySelectorAll('.star');
+  stars.forEach((s, i) => s.classList.toggle('lit', i < score));
+
+  const textEl = document.getElementById('text-' + id);
+  const original = textEl.dataset.original;
+  const final = textEl.innerText;
+
+  await fetch('/api/feedback', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ entries: memory })
+    body: JSON.stringify({
+      id,
+      feature: textEl.dataset.feature,
+      format: textEl.dataset.format,
+      source_url: textEl.dataset.source,
+      original_text: original,
+      final_text: final,
+      rating: score,
+      used: false
+    })
   });
-  toast('Marked as used — memory updated');
+
+  const savedEl = document.getElementById('rated-' + id);
+  if (savedEl) { savedEl.classList.add('show'); }
+
+  loadInsights();
+  toast(`${score}★ saved — agent is learning`);
 }
 
-function renderMemory() {
-  if (!memory.length) return;
-  const html = `
-    <div style="margin-bottom:12px;font-size:12px;color:var(--muted);font-family:'IBM Plex Mono',monospace">
-      ${memory.length} posts used
-    </div>
-    ${memory.map(m => `
-      <div class="memory-item">
-        <div>
-          <div class="memory-title">${escHtml(m.preview)}...</div>
-          <div class="memory-meta">${m.type} · ${m.date}</div>
+async function copyPost(id) {
+  const textEl = document.getElementById('text-' + id);
+  const text = textEl.innerText;
+  const original = textEl.dataset.original;
+
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copy-' + id);
+    btn.textContent = 'Copied ✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy post'; btn.classList.remove('copied'); }, 2000);
+    toast('Copied to clipboard');
+  });
+
+  // Save copy event as weak signal
+  await fetch('/api/feedback', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      id,
+      feature: textEl.dataset.feature,
+      format: textEl.dataset.format,
+      source_url: textEl.dataset.source,
+      original_text: original,
+      final_text: text,
+      used: false
+    })
+  });
+}
+
+async function markUsed(id, format, feature) {
+  const textEl = document.getElementById('text-' + id);
+  const final = textEl.innerText;
+  const original = textEl.dataset.original;
+
+  await fetch('/api/feedback', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      id,
+      feature,
+      format,
+      original_text: original,
+      final_text: final,
+      used: true
+    })
+  });
+
+  const btn = document.getElementById('used-' + id);
+  btn.textContent = '✓ Published';
+  btn.classList.add('marked');
+
+  loadHistory();
+  toast('Marked as published');
+}
+
+async function deletePost(id, format, feature, preview) {
+  await fetch('/api/delete-feedback', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id, format, feature, preview })
+  });
+
+  const card = document.getElementById('card-' + id);
+  if (card) {
+    card.style.transition = 'all 0.2s ease';
+    card.style.opacity = '0';
+    card.style.transform = 'translateX(-8px)';
+    setTimeout(() => card.remove(), 200);
+  }
+
+  toast('Removed — agent noted your preference');
+}
+
+// ── History ───────────────────────────────────────────────
+async function loadHistory() {
+  try {
+    const r = await fetch('/data/memory');
+    const d = await r.json();
+    const entries = d.entries || [];
+
+    if (!entries.length) return;
+
+    const html = entries.map(e => `
+      <div class="history-item">
+        <div class="history-dot"></div>
+        <div style="flex:1">
+          <div class="history-preview">${escHtml(e.preview || '')}</div>
+          <div class="history-meta">
+            <span class="history-tag">${escHtml(e.format || e.feature || '')}</span>
+            <span class="history-date">${escHtml(e.date || '')}</span>
+            ${e.used ? '<span class="history-tag" style="background:#e8f5ee;color:#2d6a4f">Published</span>' : ''}
+            ${e.rating ? `<span class="history-stars">${'★'.repeat(e.rating)}${'☆'.repeat(5-e.rating)}</span>` : ''}
+          </div>
         </div>
-      </div>`).join('')}`;
-  document.getElementById('memoryContent').innerHTML = html;
+      </div>`).join('');
+
+    document.getElementById('historyContent').innerHTML = html;
+  } catch(e) {}
 }
 
-// ── Helpers ───────────────────────────────────────────
-function copyById(id) {
-  const text = document.getElementById(id)?.innerText || '';
-  navigator.clipboard.writeText(text).then(() => toast('Copied'));
+// ── Insights ──────────────────────────────────────────────
+async function loadInsights() {
+  try {
+    const r = await fetch('/api/insights');
+    const d = await r.json();
+
+    if (d.ready) {
+      document.getElementById('learningLabel').textContent = `${d.total_rated} rated`;
+    }
+
+    window._insights = d;
+  } catch(e) {}
 }
 
-function escHtml(str) {
-  if (!str) return '';
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function openInsights() {
+  document.getElementById('insightsOverlay').classList.add('open');
+  renderInsights();
+}
+
+function closeInsightsOutside(e) {
+  if (e.target.id === 'insightsOverlay') document.getElementById('insightsOverlay').classList.remove('open');
+}
+
+function renderInsights() {
+  const d = window._insights;
+  if (!d || !d.ready) {
+    document.getElementById('insightsContent').innerHTML = `
+      <div class="locked-insight">
+        <div class="lock">🔒</div>
+        <p>${d ? d.message : 'Rate 3 or more posts to unlock insights about your content preferences.'}</p>
+      </div>`;
+    return;
+  }
+
+  const formatRows = (d.formats || []).map(f => {
+    const cls = f.avg >= 4 ? 'score-high' : f.avg >= 3 ? 'score-mid' : 'score-low';
+    return `<div class="format-row">
+      <div>
+        <div class="format-name">${escHtml(f.format)}</div>
+        <div class="format-count">${f.count} rated</div>
+      </div>
+      <div class="format-score ${cls}">${f.avg}★</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('insightsContent').innerHTML = `
+    <div class="insight-card">
+      <div class="insight-label">Format performance</div>
+      ${formatRows || '<div style="color:var(--muted);font-size:13px">Rate more posts with the same format to see comparisons</div>'}
+    </div>
+
+    <div class="insight-card">
+      <div class="insight-label">Agent accuracy</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:8px">
+        How much you edit generated posts (100% = no edits needed)
+      </div>
+      <div class="accuracy-bar">
+        <div class="accuracy-fill" style="width:${d.avg_accuracy}%"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px">
+        <span style="font-size:12px;color:var(--muted)">Heavy editing</span>
+        <span style="font-size:13px;font-weight:500;font-family:'DM Mono',monospace">${d.avg_accuracy}%</span>
+        <span style="font-size:12px;color:var(--muted)">No editing needed</span>
+      </div>
+    </div>
+
+    <div class="insight-card">
+      <div class="insight-label">Summary</div>
+      <div style="font-size:14px;line-height:1.6;color:var(--ink)">
+        ${d.total_posts} posts generated · ${d.total_rated} rated
+        ${d.best_format ? `<br><span style="color:var(--success)">✓ Best format: ${escHtml(d.best_format)}</span>` : ''}
+        ${d.worst_format ? `<br><span style="color:var(--muted)">↓ Needs work: ${escHtml(d.worst_format)}</span>` : ''}
+      </div>
+    </div>`;
+}
+
+// ── UI helpers ────────────────────────────────────────────
+function setLoading(btnId, containerId, msg) {
+  const btn = document.getElementById(btnId);
+  if (btn) { btn.disabled = true; btn.textContent = 'Generating...'; }
+  document.getElementById(containerId).innerHTML = `
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <div class="loading-msg">${msg}</div>
+    </div>`;
+}
+
+function resetBtn(btnId, label) {
+  const btn = document.getElementById(btnId);
+  if (btn) { btn.disabled = false; btn.textContent = label; }
+}
+
+function showError(containerId, msg) {
+  document.getElementById(containerId).innerHTML = `
+    <div class="empty-state">
+      <div class="empty-icon">⚠️</div>
+      <div class="empty-h">Something went wrong</div>
+      <div class="empty-p">${escHtml(msg)}</div>
+    </div>`;
+}
+
+function escHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function escAttr(s) {
+  if (!s) return '';
+  return String(s).replace(/"/g,'&quot;').replace(/'/g,'&#39;').substring(0,100);
 }
 
 function toast(msg) {
+  document.querySelectorAll('.toast').forEach(t => t.remove());
   const el = document.createElement('div');
   el.className = 'toast';
   el.textContent = msg;
   document.body.appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity 0.3s'; }, 1700);
   setTimeout(() => el.remove(), 2000);
 }
 </script>

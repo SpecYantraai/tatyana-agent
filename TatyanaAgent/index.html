@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Content Agent — Tatyana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fafaf8;
+  --surface: #ffffff;
+  --border: #e8e5e0;
+  --text: #1a1916;
+  --muted: #8a8780;
+  --accent: #1a5276;
+  --accent2: #c0392b;
+  --success: #1e8449;
+  --tag-bg: #eef2f7;
+  --tag-text: #1a5276;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  min-height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+header {
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.brand span { color: var(--accent2); }
+
+.settings-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+.tabs::-webkit-scrollbar { display: none; }
+
+.tab {
+  flex-shrink: 0;
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font-family: 'IBM Plex Sans', sans-serif;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.tab.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+main { padding: 20px; }
+
+.panel { display: none; }
+.panel.active { display: block; }
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.section-sub {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+label {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+input, textarea, select {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 15px;
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  outline: none;
+  transition: border-color 0.15s;
+  -webkit-appearance: none;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent);
+}
+
+textarea { resize: none; min-height: 80px; line-height: 1.5; }
+
+.field { margin-bottom: 14px; }
+
+.btn-primary {
+  width: 100%;
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'IBM Plex Sans', sans-serif;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'IBM Plex Sans', sans-serif;
+  transition: all 0.15s;
+}
+
+.btn-secondary:active { background: var(--bg); }
+
+.result-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  animation: fadeUp 0.3s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.result-header {
+  padding: 12px 16px;
+  background: var(--tag-bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.result-type {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--tag-text);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.result-body {
+  padding: 16px;
+}
+
+.result-text {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.hashtag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.hashtag {
+  font-size: 12px;
+  padding: 4px 10px;
+  background: var(--tag-bg);
+  color: var(--tag-text);
+  border-radius: 20px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.copy-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'IBM Plex Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.copy-btn:active { opacity: 0.8; }
+
+.timing-badge {
+  font-size: 11px;
+  padding: 3px 8px;
+  background: #fef9e7;
+  color: #9a7d0a;
+  border-radius: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  gap: 12px;
+}
+
+.spinner {
+  width: 28px; height: 28px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-text {
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace;
+  text-align: center;
+}
+
+.empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--muted);
+}
+
+.empty-icon { font-size: 32px; margin-bottom: 8px; opacity: 0.4; }
+.empty h3 { font-size: 15px; font-weight: 500; margin-bottom: 4px; color: var(--text); opacity: 0.6; }
+.empty p { font-size: 13px; line-height: 1.5; }
+
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 16px 0;
+}
+
+.quick-events {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.quick-event-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+  width: 100%;
+}
+
+.quick-event-btn:active { background: var(--tag-bg); }
+
+.event-name { font-size: 14px; font-weight: 500; color: var(--text); }
+.event-date { font-size: 12px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; }
+
+.tip {
+  background: #eafaf1;
+  border-left: 3px solid var(--success);
+  border-radius: 0 6px 6px 0;
+  padding: 10px 12px;
+  font-size: 12px;
+  color: #145a32;
+  line-height: 1.5;
+  margin-top: 10px;
+}
+
+/* Settings panel */
+.settings-panel {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  display: none;
+  align-items: flex-end;
+}
+
+.settings-panel.open { display: flex; }
+
+.settings-sheet {
+  background: var(--surface);
+  border-radius: 20px 20px 0 0;
+  padding: 24px 20px 40px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.settings-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.close-btn {
+  float: right;
+  background: var(--border);
+  border: none;
+  border-radius: 50%;
+  width: 28px; height: 28px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--text);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  z-index: 999;
+  animation: toastIn 0.2s ease;
+  white-space: nowrap;
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.memory-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.memory-item:last-child { border-bottom: none; }
+.memory-title { font-size: 13px; font-weight: 500; }
+.memory-meta { font-size: 11px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; margin-top: 2px; }
+.memory-score { font-size: 14px; font-weight: 500; color: var(--accent); }
+
+.pill-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.pill {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  background: var(--surface);
+  color: var(--muted);
+  transition: all 0.15s;
+}
+.pill.active { background: var(--accent); color: white; border-color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="brand">content<span>.</span>agent</div>
+    <button class="settings-btn" onclick="openSettings()">⚙️</button>
+  </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('link')">🔗 Link → Post</button>
+    <button class="tab" onclick="switchTab('event')">📅 Event</button>
+    <button class="tab" onclick="switchTab('podcast')">🎙️ Podcast</button>
+    <button class="tab" onclick="switchTab('memory')">🧠 Memory</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- LINK TO POST -->
+  <div class="panel active" id="panel-link">
+    <div class="section-title">Link → Post</div>
+    <div class="section-sub">Paste any link. Get 3 LinkedIn post options in your voice.</div>
+
+    <div class="card">
+      <div class="field">
+        <label>URL</label>
+        <input type="url" id="linkUrl" placeholder="https://..." inputmode="url">
+      </div>
+      <div class="field">
+        <label>Your take (optional)</label>
+        <textarea id="linkContext" placeholder="What resonated with you? Any angle you want to explore?" rows="3"></textarea>
+      </div>
+      <button class="btn-primary" id="linkBtn" onclick="generatePosts()">
+        Generate 3 post options
+      </button>
+    </div>
+
+    <div id="linkResults"></div>
+  </div>
+
+  <!-- EVENT CONTENT -->
+  <div class="panel" id="panel-event">
+    <div class="section-title">Event Machine</div>
+    <div class="section-sub">Generate a full pre/during/post content sequence for any event.</div>
+
+    <div style="margin-bottom:14px">
+      <label style="margin-bottom:8px">Your upcoming events</label>
+      <div class="quick-events">
+        <button class="quick-event-btn" onclick="fillEvent('Innovate QA 2026','June 4-5, 2026','Seattle, WA','innovateqaevents.com','Annual conference shaping software quality with AI. Tatyana organises this event.')">
+          <div>
+            <div class="event-name">Innovate QA 2026</div>
+            <div class="event-date">June 4-5 · Seattle, WA</div>
+          </div>
+        </button>
+        <button class="quick-event-btn" onclick="fillEvent('QA or the Highway','June 12, 2026','Columbus, Ohio','qaorthehwy.com','Midwest largest software quality conference. Tatyana is keynote speaker.')">
+          <div>
+            <div class="event-name">QA or the Highway</div>
+            <div class="event-date">June 12 · Columbus, OH · Keynote</div>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="field">
+        <label>Event name</label>
+        <input type="text" id="eventName" placeholder="Conference or meetup name">
+      </div>
+      <div class="field">
+        <label>Date</label>
+        <input type="text" id="eventDate" placeholder="e.g. June 4-5, 2026">
+      </div>
+      <div class="field">
+        <label>Location</label>
+        <input type="text" id="eventLocation" placeholder="City, State">
+      </div>
+      <div class="field">
+        <label>URL</label>
+        <input type="url" id="eventUrl" placeholder="Event website">
+      </div>
+      <div class="field">
+        <label>Key details (speakers, theme, what's different)</label>
+        <textarea id="eventDetails" placeholder="What makes this event worth attending? Any notable speakers or moments?" rows="3"></textarea>
+      </div>
+      <button class="btn-primary" id="eventBtn" onclick="generateEventContent()">
+        Generate content sequence
+      </button>
+    </div>
+
+    <div id="eventResults"></div>
+  </div>
+
+  <!-- PODCAST REPURPOSER -->
+  <div class="panel" id="panel-podcast">
+    <div class="section-title">Podcast → Posts</div>
+    <div class="section-sub">One episode becomes 5 LinkedIn posts. The Agentic Quality podcast deserves more reach.</div>
+
+    <div class="card">
+      <div class="field">
+        <label>Episode title</label>
+        <input type="text" id="podTitle" placeholder="e.g. Rethinking quality metrics at scale">
+      </div>
+      <div class="field">
+        <label>Guest name</label>
+        <input type="text" id="podGuest" placeholder="Guest's full name">
+      </div>
+      <div class="field">
+        <label>Guest title & company</label>
+        <input type="text" id="podGuestTitle" placeholder="e.g. Director of Quality, Slalom">
+      </div>
+      <div class="field">
+        <label>Episode URL</label>
+        <input type="url" id="podUrl" placeholder="contextqa.com/podcast/...">
+      </div>
+      <div class="field">
+        <label>Key insights or transcript excerpt</label>
+        <textarea id="podContent" placeholder="Paste key quotes, insights, or a summary of what was discussed..." rows="5"></textarea>
+      </div>
+      <button class="btn-primary" id="podBtn" onclick="generatePodcastPosts()">
+        Generate 5 posts from episode
+      </button>
+    </div>
+
+    <div id="podResults"></div>
+  </div>
+
+  <!-- MEMORY -->
+  <div class="panel" id="panel-memory">
+    <div class="section-title">Memory</div>
+    <div class="section-sub">Posts you've used. Helps the agent learn what performs.</div>
+    <div class="card" id="memoryContent">
+      <div class="empty">
+        <div class="empty-icon">🧠</div>
+        <h3>No memory yet</h3>
+        <p>Use a post and mark it as used to build memory</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Settings Sheet -->
+<div class="settings-panel" id="settingsPanel" onclick="closeSettingsOutside(event)">
+  <div class="settings-sheet">
+    <button class="close-btn" onclick="closeSettings()">✕</button>
+    <div class="settings-title">Settings</div>
+
+    <div class="field">
+      <label>LLM Provider</label>
+      <div class="pill-row" id="providerPills">
+        <button class="pill active" onclick="selectProvider('openai', this)">OpenAI</button>
+        <button class="pill" onclick="selectProvider('anthropic', this)">Anthropic</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>API Key</label>
+      <input type="password" id="settingsApiKey" placeholder="sk-...">
+    </div>
+
+    <button class="btn-primary" onclick="saveSettings()">Save settings</button>
+  </div>
+</div>
+
+<script>
+// ── State ─────────────────────────────────────────────
+let settings = { provider: 'openai', api_key: '' };
+let memory = [];
+
+async function init() {
+  try {
+    const res = await fetch('/data/settings');
+    const data = await res.json();
+    if (data.provider) {
+      settings = data;
+      document.getElementById('settingsApiKey').value = data.api_key || '';
+      selectProvider(data.provider);
+    }
+  } catch(e) {}
+
+  try {
+    const res = await fetch('/data/memory');
+    const data = await res.json();
+    if (data.entries) { memory = data.entries; renderMemory(); }
+  } catch(e) {}
+}
+
+init();
+
+// ── Tabs ──────────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+  if (tab === 'memory') renderMemory();
+}
+
+// ── Settings ──────────────────────────────────────────
+function openSettings() {
+  document.getElementById('settingsPanel').classList.add('open');
+}
+
+function closeSettings() {
+  document.getElementById('settingsPanel').classList.remove('open');
+}
+
+function closeSettingsOutside(e) {
+  if (e.target === document.getElementById('settingsPanel')) closeSettings();
+}
+
+function selectProvider(p, btn) {
+  settings.provider = p;
+  document.querySelectorAll('#providerPills .pill').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  else {
+    document.querySelectorAll('#providerPills .pill').forEach(b => {
+      if (b.textContent.toLowerCase().includes(p)) b.classList.add('active');
+    });
+  }
+}
+
+async function saveSettings() {
+  settings.api_key = document.getElementById('settingsApiKey').value.trim();
+  await fetch('/data/settings', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(settings)
+  });
+  closeSettings();
+  toast('Settings saved');
+}
+
+function getPayload(extra) {
+  return { ...settings, ...extra };
+}
+
+// ── Feature 1: Link → Post ────────────────────────────
+async function generatePosts() {
+  if (!settings.api_key) { openSettings(); toast('Add your API key first'); return; }
+  const url = document.getElementById('linkUrl').value.trim();
+  if (!url) { toast('Paste a URL first'); return; }
+
+  const btn = document.getElementById('linkBtn');
+  btn.disabled = true; btn.textContent = 'Generating...';
+
+  document.getElementById('linkResults').innerHTML = `
+    <div class="loading">
+      <div class="spinner"></div>
+      <div class="loading-text">Reading the link and writing in your voice...</div>
+    </div>`;
+
+  try {
+    const res = await fetch('/api/link-to-post', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(getPayload({
+        url,
+        context: document.getElementById('linkContext').value.trim()
+      }))
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    renderPostResults('linkResults', data.posts);
+  } catch(e) {
+    document.getElementById('linkResults').innerHTML = `<div class="empty"><h3>Failed</h3><p>${e.message}</p></div>`;
+  }
+
+  btn.disabled = false; btn.textContent = 'Generate 3 post options';
+}
+
+function renderPostResults(containerId, posts) {
+  const html = posts.map((p, i) => `
+    <div class="result-card">
+      <div class="result-header">
+        <span class="result-type">Option ${i+1} — ${p.format || p.type || 'Post'}</span>
+        <button class="copy-btn" onclick="copyPost(${i}, '${containerId}')">Copy</button>
+      </div>
+      <div class="result-body">
+        <div class="result-text" id="post-${containerId}-${i}">${escHtml(p.body || p.hook + '\n\n' + p.body)}</div>
+        <div class="hashtag-row">${(p.hashtags || []).map(h => `<span class="hashtag">${h}</span>`).join('')}</div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button class="btn-secondary" onclick="markUsed('${p.format || p.type}', '${escHtml(p.body || '').substring(0,60)}')">✓ Used this</button>
+        </div>
+      </div>
+    </div>`).join('');
+  document.getElementById(containerId).innerHTML = html;
+  window._posts = window._posts || {};
+  window._posts[containerId] = posts;
+}
+
+function copyPost(i, containerId) {
+  const post = window._posts?.[containerId]?.[i];
+  if (!post) return;
+  const text = (post.body || '') + '\n\n' + (post.hashtags || []).join(' ');
+  navigator.clipboard.writeText(text).then(() => toast('Copied to clipboard'));
+}
+
+// ── Feature 2: Event Content ──────────────────────────
+function fillEvent(name, date, location, url, details) {
+  document.getElementById('eventName').value = name;
+  document.getElementById('eventDate').value = date;
+  document.getElementById('eventLocation').value = location;
+  document.getElementById('eventUrl').value = url;
+  document.getElementById('eventDetails').value = details;
+  toast(`${name} loaded`);
+}
+
+async function generateEventContent() {
+  if (!settings.api_key) { openSettings(); toast('Add your API key first'); return; }
+  const name = document.getElementById('eventName').value.trim();
+  if (!name) { toast('Enter event name'); return; }
+
+  const btn = document.getElementById('eventBtn');
+  btn.disabled = true; btn.textContent = 'Generating sequence...';
+
+  document.getElementById('eventResults').innerHTML = `
+    <div class="loading">
+      <div class="spinner"></div>
+      <div class="loading-text">Creating your 5-post event sequence...</div>
+    </div>`;
+
+  try {
+    const res = await fetch('/api/event-content', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(getPayload({
+        event_name: name,
+        event_date: document.getElementById('eventDate').value,
+        event_location: document.getElementById('eventLocation').value,
+        event_url: document.getElementById('eventUrl').value,
+        details: document.getElementById('eventDetails').value
+      }))
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    renderEventResults(data.sequence);
+  } catch(e) {
+    document.getElementById('eventResults').innerHTML = `<div class="empty"><h3>Failed</h3><p>${e.message}</p></div>`;
+  }
+
+  btn.disabled = false; btn.textContent = 'Generate content sequence';
+}
+
+function renderEventResults(sequence) {
+  const html = sequence.map((p, i) => `
+    <div class="result-card">
+      <div class="result-header">
+        <span class="result-type">${p.title || `Post ${i+1}`}</span>
+        <span class="timing-badge">${p.timing || ''}</span>
+      </div>
+      <div class="result-body">
+        <div class="result-text" id="ev-post-${i}">${escHtml(p.body)}</div>
+        <div class="hashtag-row">${(p.hashtags || []).map(h => `<span class="hashtag">${h}</span>`).join('')}</div>
+        ${p.tip ? `<div class="tip">💡 ${escHtml(p.tip)}</div>` : ''}
+        <div style="margin-top:10px">
+          <button class="copy-btn" onclick="copyById('ev-post-${i}')">Copy post</button>
+        </div>
+      </div>
+    </div>`).join('');
+  document.getElementById('eventResults').innerHTML = html;
+}
+
+// ── Feature 3: Podcast ────────────────────────────────
+async function generatePodcastPosts() {
+  if (!settings.api_key) { openSettings(); toast('Add your API key first'); return; }
+  const title = document.getElementById('podTitle').value.trim();
+  if (!title) { toast('Enter episode title'); return; }
+
+  const btn = document.getElementById('podBtn');
+  btn.disabled = true; btn.textContent = 'Generating posts...';
+
+  document.getElementById('podResults').innerHTML = `
+    <div class="loading">
+      <div class="spinner"></div>
+      <div class="loading-text">Turning one episode into 5 posts...</div>
+    </div>`;
+
+  try {
+    const res = await fetch('/api/podcast-repurpose', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(getPayload({
+        title,
+        guest: document.getElementById('podGuest').value,
+        guest_title: document.getElementById('podGuestTitle').value,
+        url: document.getElementById('podUrl').value,
+        content: document.getElementById('podContent').value
+      }))
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    renderPodcastResults(data.posts);
+  } catch(e) {
+    document.getElementById('podResults').innerHTML = `<div class="empty"><h3>Failed</h3><p>${e.message}</p></div>`;
+  }
+
+  btn.disabled = false; btn.textContent = 'Generate 5 posts from episode';
+}
+
+function renderPodcastResults(posts) {
+  const html = posts.map((p, i) => `
+    <div class="result-card">
+      <div class="result-header">
+        <span class="result-type">${p.type || `Post ${i+1}`}</span>
+        <button class="copy-btn" onclick="copyById('pod-post-${i}')">Copy</button>
+      </div>
+      <div class="result-body">
+        <div class="result-text" id="pod-post-${i}">${escHtml(p.body)}</div>
+        <div class="hashtag-row">${(p.hashtags || []).map(h => `<span class="hashtag">${h}</span>`).join('')}</div>
+        ${p.best_time_to_post ? `<div class="tip">⏰ Best time: ${escHtml(p.best_time_to_post)}</div>` : ''}
+      </div>
+    </div>`).join('');
+  document.getElementById('podResults').innerHTML = html;
+}
+
+// ── Memory ────────────────────────────────────────────
+async function markUsed(type, preview) {
+  const entry = {
+    id: Date.now(),
+    type,
+    preview,
+    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+  };
+  memory.unshift(entry);
+  if (memory.length > 30) memory = memory.slice(0, 30);
+  await fetch('/data/memory', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ entries: memory })
+  });
+  toast('Marked as used — memory updated');
+}
+
+function renderMemory() {
+  if (!memory.length) return;
+  const html = `
+    <div style="margin-bottom:12px;font-size:12px;color:var(--muted);font-family:'IBM Plex Mono',monospace">
+      ${memory.length} posts used
+    </div>
+    ${memory.map(m => `
+      <div class="memory-item">
+        <div>
+          <div class="memory-title">${escHtml(m.preview)}...</div>
+          <div class="memory-meta">${m.type} · ${m.date}</div>
+        </div>
+      </div>`).join('')}`;
+  document.getElementById('memoryContent').innerHTML = html;
+}
+
+// ── Helpers ───────────────────────────────────────────
+function copyById(id) {
+  const text = document.getElementById(id)?.innerText || '';
+  navigator.clipboard.writeText(text).then(() => toast('Copied'));
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function toast(msg) {
+  const el = document.createElement('div');
+  el.className = 'toast';
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2000);
+}
+</script>
+</body>
+</html>
